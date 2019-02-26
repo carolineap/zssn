@@ -5,7 +5,7 @@ class InfectedController < ApplicationController
 	# PATCH/PUT /infected/1
   	def update
     	if @survivor.update(infected: @survivor.infected + 1)
-      		render json: @survivor
+      		render status: :ok
     	else
       		render json: @survivor.errors, status: :unprocessable_entity
     	end

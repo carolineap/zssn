@@ -112,7 +112,7 @@ RSpec.describe "Survivors", type: :request do
   end
 
   # Test suite for PUT /survivors/:id
-  describe 'PUT /survivors/:id' do
+  describe 'PUT PATCH/survivors/:id' do
     
     let(:valid_attributes) { { latitude: '1234', longitude: '5432' } }
 

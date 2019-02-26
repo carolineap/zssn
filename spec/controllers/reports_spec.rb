@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Survivors", type: :request do
+RSpec.describe "Reports", type: :request do
  
   let!(:survivors) { create_list(:survivor, 8, water: 4, food:3, medication:2, ammunition: 1) }
 
