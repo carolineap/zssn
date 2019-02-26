@@ -1,24 +1,5 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+REST API for [ZSSN](https://gist.github.com/akitaonrails/711b5553533d1a14364907bbcdbee677) problem. 
+Developed in Ruby on Rails (v5.2.2) and Sqlite3 (v1.3.6)
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
