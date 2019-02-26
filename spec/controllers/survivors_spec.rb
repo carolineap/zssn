@@ -46,7 +46,7 @@ RSpec.describe "Survivors", type: :request do
     end
    
 
-    context 'when the record does not exist' do
+    context 'when the survivor does not exist' do
 
       let(:survivor_id) { 100 }
       before { get "/survivors/#{survivor_id}" }
@@ -57,7 +57,7 @@ RSpec.describe "Survivors", type: :request do
       
     end
 
-    context 'when the record is infected' do
+    context 'when the survivor is infected' do
       
       before { get "/survivors/#{infected_survivor_id}" }
 
