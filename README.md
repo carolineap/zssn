@@ -222,10 +222,12 @@ Since the action of flag some survivor infected is not an idempotent action, it 
     }
   ```
 ### Points lost because of infected survivor.
- - Responses: 
+
+- GET http://localhost:3000/reports/points_lost
+- Responses: 
     - 200 ok
     
-   - GET http://localhost:3000/reports/points_lost
+   
   ```
    {
       "points_lost": 19
