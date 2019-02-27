@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :survivors, only: [:index, :update, :show, :create] 
 
-  resources :infected, only: [:update]
+  resources :infected, only: [:create]
   
   resources :trade
   

@@ -7,7 +7,7 @@ class Survivor < ApplicationRecord
 	end
 
 	def enough_items?(water, food, medication, ammunition)
-		self.water >= water.to_i and self.food >= food.to_i and self.medication >= medication.to_i and self.ammunition >= medication.to_i
+		self.water >= water and self.food >= food and self.medication >= medication and self.ammunition >= medication
 	end
 
 	def trade(water1, food1, medication1, ammunition1, water2, food2, medication2, ammunition2)

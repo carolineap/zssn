@@ -12,7 +12,7 @@ class TradeController < ApplicationController
 			get_survivor_2
 
 			if @survivor_1.is_infected? or @survivor_2.is_infected? 
-				render status: :forbidden and return
+				render json: {"message": "infected survivor can not trade items"}, status: :forbidden and return
 			end
 
 			water_1, food_1, medication_1, ammunition_1 = trade_params(params[:items][0])
@@ -34,11 +34,11 @@ class TradeController < ApplicationController
 					end
 
 				else
-					render status: :unprocessable_entity
+					render json: {"message": "items do not have same number of points"}, status: :unprocessable_entity
 				end
 
 			else
-				render status: :unprocessable_entity
+				render json: {"message": "at least one of the survivors does not have enough items to trade"}, status: :unprocessable_entity
 			end
 		else
 			render status: :bad_request

@@ -16,19 +16,13 @@ RSpec.describe "Survivors", type: :request do
     before { get '/survivors' }
 
     it 'returns survivors' do
-      # Note `json` is a custom helper to parse JSON responses
-      expect(json).not_to be_empty
-     
+      expect(json).not_to be_empty 
       expect(response).to have_http_status(200)
     end
-   end
 
-  #   it 'returns status code 200' do
-  #     expect(response).to have_http_status(200)
-  #   end
-  # end
+  end
 
-  # Test suite for GET /todos/:id
+  # Test suite for GET /survivors/:id
   describe 'GET /survivors/:id' do
 
     context 'when the record exists' do
@@ -62,6 +56,7 @@ RSpec.describe "Survivors", type: :request do
       before { get "/survivors/#{infected_survivor_id}" }
 
       it 'returns status code 403' do
+        expect(response.body).to match(/can not show infected survivor/)
         expect(response).to have_http_status(403)
       end
       
@@ -69,10 +64,10 @@ RSpec.describe "Survivors", type: :request do
 
   end
 
-  # Test suite for POST /todos
+  # Test suite for POST /survivors
   describe 'POST /survivors' do
-    # valid payload
-    let(:valid_attributes) {{ name: "José", age: 25, gender: "Male", latitude: "0", longitude: "940", inventory: { water: 1, food: 5, medication: 0, ammunition: 0 }}} 
+
+    let(:valid_attributes) {{ survivor: { name: "José", age: 25, gender: "Male", latitude: "0", longitude: "940", inventory: { water: 1, food: 5, medication: 0, ammunition: 0 }}}} 
 
     context 'when the request is valid' do
       before { post '/survivors', params: valid_attributes }
@@ -88,7 +83,7 @@ RSpec.describe "Survivors", type: :request do
 
     context 'when the survivor is invalid' do
       #does not have medication
-      let(:invalid_attributes) {{ name: "Jose", age: 25, gender: "Male", latitude: "0", longitude: "940", inventory: { water: 1, food: 5, ammunition: 0 }}} 
+      let(:invalid_attributes) {{ survivor: { name: "Jose", age: 25, gender: "Male", latitude: "0", longitude: "940", inventory: { water: 1, food: 5, ammunition: 0 }}}}
 
       before { post '/survivors', params: invalid_attributes }
 
@@ -100,12 +95,12 @@ RSpec.describe "Survivors", type: :request do
 
     context 'when the survivor does not have inventory' do
 
-      let(:invalid_attributes) {{ age: 25, gender: "Male", latitude: "0", longitude: "940"}} 
+      let(:invalid_attributes) {{ survivor: { age: 25, gender: "Male", latitude: "0", longitude: "940"}}}
 
       before { post '/survivors', params: invalid_attributes }
 
-      it 'returns status code 422' do
-        expect(response).to have_http_status(422)
+      it 'returns status code 400' do
+        expect(response).to have_http_status(400)
       end
       
     end
@@ -114,10 +109,10 @@ RSpec.describe "Survivors", type: :request do
   # Test suite for PUT /survivors/:id
   describe 'PUT PATCH/survivors/:id' do
     
-    let(:valid_attributes) { { latitude: '1234', longitude: '5432' } }
+    let(:valid_attributes) { { location: { latitude: '1234', longitude: '5432' }}}
 
     context 'when the survivors exists' do
-      before { put "/survivors/#{survivor_id}", params: valid_attributes }
+      before { patch "/survivors/#{survivor_id}", params: valid_attributes }
 
       it 'updates the record' do
         expect(response.body).to be_empty
@@ -133,6 +128,7 @@ RSpec.describe "Survivors", type: :request do
       before { patch "/survivors/#{infected_survivor_id}", params: valid_attributes }
 
       it 'returns status code 403' do
+        expect(response.body).to match(/infected survivor can not update location/)
         expect(response).to have_http_status(403)
       end
     end
@@ -161,12 +157,4 @@ RSpec.describe "Survivors", type: :request do
 
   end
 
-  # # Test suite for DELETE /todos/:id
-  # describe 'DELETE /todos/:id' do
-  #   before { delete "/todos/#{todo_id}" }
-
-  #   it 'returns status code 204' do
-  #     expect(response).to have_http_status(204)
-  #   end
-  
 end

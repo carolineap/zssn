@@ -12,17 +12,13 @@ class SurvivorsController < ApplicationController
   def show
     if @survivor.present? and not @survivor.infected?
       render json: @survivor, status: :ok
-    elsif @survivor.present?
-      render status: :forbidden
     else
-      render status: :forbidden
+      render json: {"message": "can not show infected survivor"}, status: :forbidden
     end
   end
 
   # POST /survivors
   def create
-
-    if params.has_key?("inventory")
 
       @survivor = Survivor.new(survivor_params)
 
@@ -31,22 +27,15 @@ class SurvivorsController < ApplicationController
       else
         render json: @survivor.errors, status: :unprocessable_entity
       end
-
-    else
-        render status: :unprocessable_entity
-    end
-
   end
 
 
   # PATCH/PUT /survivors/1
   def update
       if not @survivor.is_infected? and survivor_update_params.present? and @survivor.update(survivor_update_params)
-        render json: @survivor,status: :no_content
+        render status: :no_content
       elsif @survivor.is_infected?
-        render status: :forbidden
-      elsif not survivor_update_params.present?
-        render status: :bad_request
+        render json: {"message": "infected survivor can not update location"}, status: :forbidden
       else
         render json: @survivor.errors, status: :unprocessable_entity
       end
@@ -59,13 +48,12 @@ class SurvivorsController < ApplicationController
       @survivor = Survivor.find(params[:id])
     end
 
-    # Only allow a trusted parameter "white list" through.
     def survivor_params
-      params.permit(:name, :age, :gender, :latitude, :longitude).merge(infected: 0).merge(params.require(:inventory).permit(:water, :food, :medication, :ammunition))
+      params.require(:survivor).permit(:name, :age, :gender, :latitude, :longitude).merge(infected: 0).merge(params.require(:survivor).require(:inventory).permit(:water, :food, :medication, :ammunition))
     end
 
     def survivor_update_params
-      params.permit(:latitude, :longitude)
+      params.require(:location).permit(:latitude, :longitude)
     end
 
 end

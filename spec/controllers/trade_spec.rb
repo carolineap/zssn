@@ -9,7 +9,7 @@ RSpec.describe "Infected", type: :request do
   let(:infected_survivor) { create(:survivor, infected: 4) }
   let(:infected_survivor_id) { infected_survivor.id }
 
-  # Test suite for POST /todos
+  # Test suite for POST /survivors
   describe 'POST /trade' do
     
     context 'when the request is valid' do
@@ -36,9 +36,13 @@ RSpec.describe "Infected", type: :request do
 
     context 'when the request the items are not equivalent' do
       
-      let(:invalid_attributes) {{ items: [ { id: survivor1_id, food: 3}, {id: survivor2_id, medication: 2, ammunition:2 }]}} 
+      let(:invalid_attributes) {{ items: [ { id: survivor1_id, food: 1}, {id: survivor2_id, medication: 2, ammunition:2 }]}} 
       
       before { post '/trade', params: invalid_attributes }
+
+      it 'expected message' do
+        expect(response.body).to match(/items do not have same number of points/)
+      end
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -51,6 +55,7 @@ RSpec.describe "Infected", type: :request do
       let(:invalid_attributes) {{ items: [ { id: survivor1_id, food: 3}, {id: survivor2_id, medication: 2, ammunition:2 }]}} 
       
       before { post '/trade', params: invalid_attributes }
+
 
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
@@ -74,6 +79,10 @@ RSpec.describe "Infected", type: :request do
       
       before { post '/trade', params: invalid_attributes }
 
+      it 'expected message' do
+        expect(response.body).to match(/infected survivor can not trade items/)
+      end
+
       it 'returns status code 403' do
         expect(response).to have_http_status(403)
       end
@@ -84,6 +93,10 @@ RSpec.describe "Infected", type: :request do
       let(:invalid_attributes) {{ items: [ {id: survivor1_id, food: 3}, {id: survivor2_id, medication: 1, ammunition:4 }]}} 
       
       before { post '/trade', params: invalid_attributes }
+
+      it 'expected message' do
+        expect(response.body).to match(/at least one of the survivors does not have enough items to trade/)
+      end
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)

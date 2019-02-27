@@ -1,16 +1,16 @@
 class ReportsController < ApplicationController
 
   	def infected_survivors
-    	 	render json: {'infected_survivors': String(get_infected_survivors)+'%'}
+    	 	render json: {'infected_survivors': String(get_infected_survivors.round(2))+'%'}
   	end
 
     def non_infected_survivors
-      render json: {'non_infected_survivors': String(100 - get_infected_survivors)+'%'}
+      render json: {'non_infected_survivors': String(100 - get_infected_survivors.round(2))+'%'}
     end
 
     def average_resources
       water, food, medication, ammunition = average
-      render json: {'water': water, 'food': food, 'medication': medication, 'ammunition': ammunition}
+      render json: {'water': water.round(2), 'food': food.round(2), 'medication': medication.round(2), 'ammunition': ammunition.round(2)}
     end
 
     def points_lost

@@ -5,11 +5,13 @@ RSpec.describe "Infected", type: :request do
   let!(:survivor) { create(:survivor) }
   let!(:survivor_id) { survivor.id }
 
-  describe 'PUT /infected/:id' do
+  describe 'POST /infected/:id' do
 
     context 'when survivor exist' do
       
-      before { put "/infected/#{survivor_id}" }
+      let(:valid_attributes) {{ id: survivor_id }}
+
+      before { post "/infected", params: valid_attributes}
 
       it 'increment infected flag' do
         expect(response).to have_http_status(200)
@@ -18,16 +20,26 @@ RSpec.describe "Infected", type: :request do
     end
   
    
-    context 'when there are no infected survivors' do
+    context 'when survivor does not exist' do
 
-      let(:survivor_id) { 100 }
+      let(:invalid_attributes) {{ id: 100 }}
 
-      before { put "/infected/#{survivor_id}" }
+      before { post "/infected/", params: invalid_attributes}
 
       it 'return not found' do
         expect(response).to have_http_status(404)
       end
     end
+
+    context 'when param is not given' do
+
+      before { post "/infected"}
+
+      it 'id does not exist' do
+        expect(response).to have_http_status(400)
+      end
+    end
+
   end
 
 end
