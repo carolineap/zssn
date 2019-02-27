@@ -43,7 +43,6 @@ class SurvivorsController < ApplicationController
 
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_survivor
       @survivor = Survivor.find(params[:id])
     end

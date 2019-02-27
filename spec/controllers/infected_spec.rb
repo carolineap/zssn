@@ -40,6 +40,18 @@ RSpec.describe "Infected", type: :request do
       end
     end
 
+
+    context 'when param does not have id key' do
+
+      let(:invalid_attributes) {{ survivor: 100 }}
+
+      before { post "/infected", params: invalid_attributes}
+
+      it 'id does not exist' do
+        expect(response).to have_http_status(400)
+      end
+    end
+
   end
 
 end

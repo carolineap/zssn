@@ -104,6 +104,18 @@ RSpec.describe "Survivors", type: :request do
       end
       
     end
+
+    context 'when the param format is wrong' do
+
+      let(:invalid_attributes) {{name: "Jose", age: 25, gender: "Male", latitude: "0", longitude: "940", inventory: { water: 1, food: 5, ammunition: 0 }}}
+
+      before { post '/survivors', params: invalid_attributes }
+
+      it 'returns status code 400' do
+        expect(response).to have_http_status(400)
+      end
+      
+    end
   end
 
   # Test suite for PUT /survivors/:id

@@ -11,6 +11,13 @@ Developed in Ruby on Rails (v5.2.2) and Sqlite3 (v1.3.6)
 bundle install
 
 ```
+(2.1 optional) If you want to pre-populate the database with some survivors run
+
+```
+rails db:seed
+
+```
+
 3. To run the project:
 ```
 rails s
@@ -34,7 +41,7 @@ bundle exec rspec
 
 - POST http://localhost:3000/survivors
 
-  - Create a new survivor. Paramaters must be something like:
+  - Create a new survivor. Parameters must be something like:
 
 ```
 {
@@ -56,24 +63,24 @@ bundle exec rspec
 ```
 - Response:
   - 201 created, when survivor is created with success
-  ```
-  {
-    "id": 17,
-    "name": "Joseph",
-    "age": 25,
-    "gender": "Male",
-    "latitude": "25",
-    "longitude": "940",
-    "infected": 0,
-    "water": 1,
-    "food": 5,
-    "medication": 0,
-    "ammunition": 0,
-    "created_at": "2019-02-27T13:57:54.249Z",
-    "updated_at": "2019-02-27T13:57:54.249Z"
-  }
-  
-  ```
+    ```
+    {
+      "id": 17,
+      "name": "Joseph",
+      "age": 25,
+      "gender": "Male",
+      "latitude": "25",
+      "longitude": "940",
+      "infected": 0,
+      "water": 1,
+      "food": 5,
+      "medication": 0,
+      "ammunition": 0,
+      "created_at": "2019-02-27T13:57:54.249Z",
+      "updated_at": "2019-02-27T13:57:54.249Z"
+    }
+    
+    ```
   - 400 bad_request when 'survivor' or 'inventory' key is missing
   - 422 unprocessable_entity when some of the parameters is missing or have wrong format
       
@@ -99,23 +106,15 @@ bundle exec rspec
    }
   }
   ```
-  - Respose
-    - 200 ok when update has success
+  - Responses:
+    - 204 no content when update has success
+
+    - 403 forbidden when survivor is infected
     ```
-     {
-       "survivor": {
-          "survivor_id": 17,
-          "latitude": "10",
-          "longitude": "340"
-      }
-     }
-     ```
-     - 403 forbidden when survivor is infected
-     ```
-     "message": "infected survivor can not update location"
-     ```
-     - 400 bad_request when 'location' key is missing
-     - 422 unprocessable_entity when latitude or longitude is missing or have wrong format
+    "message": "infected survivor can not update location"
+    ```
+   - 400 bad_request when 'location' key is missing
+   - 422 unprocessable_entity when latitude or longitude is missing or have wrong format
      
 ## FLAG INFECTED
 
@@ -192,37 +191,45 @@ Since the action of flag some survivor infected is not an idempotent action, it 
  ### Percentage of infected survivors:
  
  - GET http://localhost:3000/reports/infected_survivors
- ```
-  {
-    "infected_survivors": "33%"
-  }
- ```
+  - Responses: 
+    - 200 ok
+   ```
+    {
+      "infected_survivors": "33%"
+    }
+   ```
  ### Percentage of non-infected survivors:
   - GET http://localhost:3000/reports/non_infected_survivors
- ```
-  {
-    "non_infected_survivors": "67%"
-  }
+   - Responses: 
+    - 200 ok
+   ```
+    {
+      "non_infected_survivors": "67%"
+    }
 
-```
+  ```
 ### Average amount of each kind of resource by survivor
  - GET http://localhost:3000/reports/average_resources
-```
-  {
-    
-    "water": 1.33,
-    "food": 3,
-    "medication": 3,
-    "ammunition": 3
-  }
-```
+  - Responses: 
+    - 200 ok
+  ```
+    {
+      
+      "water": 1.33,
+      "food": 3,
+      "medication": 3,
+      "ammunition": 3
+    }
+  ```
 ### Points lost because of infected survivor.
+ - Responses: 
+    - 200 ok
+    
+   - GET http://localhost:3000/reports/points_lost
+  ```
+   {
+      "points_lost": 19
+   }
+  ```
 
- - GET http://localhost:3000/reports/points_lost
-```
- {
-    "points_lost": 19
- }
-```
-All reports status responses are 200 ok.
  
